@@ -3,15 +3,14 @@
 2. [X] Industry
 3. [X] Company
 4. [X] Quote
+5. [ ] Performance
 
 **Api Endpoint Jobs**
 1. [X] Profile
 2. [X] Quote
-3. [ ] upload Avatar
+3. [X] IndexList
+4. [ ] upload Avatar
 
 **API Request Event**
 1. [X] ProfileUpdated
 2. [X] QuoteUpdated
-
-Rewrite entities(change setters to one create method)
-Hide doctrine's working code & works with it in service

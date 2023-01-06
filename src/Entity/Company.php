@@ -101,6 +101,9 @@ class Company
     #[ORM\OneToOne(mappedBy: 'company', cascade: ['persist', 'remove'])]
     private ?Quote $quote = null;
 
+    #[ORM\OneToOne(mappedBy: 'company', cascade: ['persist', 'remove'])]
+    private ?Performance $performance = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -419,6 +422,23 @@ class Company
         }
 
         $this->quote = $quote;
+
+        return $this;
+    }
+
+    public function getPerformance(): ?Performance
+    {
+        return $this->performance;
+    }
+
+    public function setPerformance(Performance $performance): self
+    {
+        // set the owning side of the relation if necessary
+        if ($performance->getCompany() !== $this) {
+            $performance->setCompany($this);
+        }
+
+        $this->performance = $performance;
 
         return $this;
     }
