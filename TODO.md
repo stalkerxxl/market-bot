@@ -10,7 +10,7 @@
 2. [X] QuoteRequest
 3. [X] IndexListRequest
 4. [X] PerformanceRequest (single|multi?)
-5[ ] upload Avatar
+5. [ ] upload Avatar
 
 **API Request Event**
 1. [X] ProfileUpdated

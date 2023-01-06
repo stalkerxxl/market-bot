@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\ApiClient\FmpClient;
 use App\Entity\Company;
 use App\Enum\IndexList;
+use App\Message\DownloadCompanyLogo;
 use App\Message\IndexListRequest;
 use App\Message\PerformanceRequest;
 use App\Message\ProfileRequest;
@@ -32,7 +33,8 @@ class TestController extends AbstractController
     #[Route('/', name: 'app_test_index')]
     public function index(): Response
     {
-        $this->getPerformance();
+        //$this->getPerformance();
+        $this->getCompanyLogo();
         //$this->getIndexList(IndexList::SP500);
         //$this->getProfile('META');
         return $this->render('test/index.html.twig', [
@@ -60,13 +62,25 @@ class TestController extends AbstractController
     {
         $repo = $this->entityManager->getRepository(Company::class);
         $data = $repo->findAll();
-        $l = [];
         $unique = array_map(function ($item) {
             return $item->getId();
         }, $data);
 
         foreach ($unique as $companyId) {
             $this->messageBus->dispatch(new PerformanceRequest($companyId));
+        }
+    }
+
+    public function getCompanyLogo()
+    {
+        $repo = $this->entityManager->getRepository(Company::class);
+        $data = $repo->findAll();
+        $unique = array_map(function ($item) {
+            return $item->getId();
+        }, $data);
+
+        foreach ($unique as $companyId) {
+            $this->messageBus->dispatch(new DownloadCompanyLogo($companyId));
         }
     }
 }
