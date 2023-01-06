@@ -11,7 +11,6 @@ use App\Exception\FmpClientException;
 use App\Message\ProfileRequest;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\Validator\Exception\ValidatorException;
 
 #[AsMessageHandler]
 final class ProfileRequestHandler extends AbstractRequestHandler
@@ -34,7 +33,7 @@ final class ProfileRequestHandler extends AbstractRequestHandler
             $company = $this->makeCompany($dto, $sector, $industry);
 
             $this->entityManager->flush();
-            $this->eventDispatcher->dispatch(new ProfileUpdatedEvent($company));
+            $this->eventDispatcher->dispatch(new ProfileUpdatedEvent($company->getId()));
 
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());

@@ -4,74 +4,41 @@ namespace App\DTO;
 
 use DateTimeImmutable;
 use Exception;
-use Symfony\Component\Validator\Constraints as Assert;
+use phpDocumentor\Reflection\Types\This;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
-class QuoteResponse
+class QuoteResponse extends AbstractResponse
 {
-    #[Assert\NotBlank]
-    public string $symbol;
-
-    #[Assert\Type('numeric')]
     public float $price;
-
-    #[Assert\Type('numeric')]
     public float $open;
-
-    #[Assert\Type('numeric')]
     public float $previousClose;
-
-    #[Assert\Type('numeric')]
     public float $change;
-
-    #[Assert\Type('numeric')]
     public float $changesPercentage;
-
-    #[Assert\Type('numeric')]
     public float $dayLow;
-
-    #[Assert\Type('numeric')]
     public float $dayHigh;
-
-    #[Assert\Type('numeric')]
     public float $yearLow;
-
-    #[Assert\Type('numeric')]
     public float $yearHigh;
-
-    #[Assert\Type('numeric')]
     public int $marketCap;
-
-    #[Assert\Type('numeric')]
     public float $priceAvg50;
-
-    #[Assert\Type('numeric')]
     public float $priceAvg200;
-
-    #[Assert\Type('numeric')]
     public int $volume;
-
-    #[Assert\Type('numeric')]
     public int $avgVolume;
-
-    #[Assert\NotBlank(allowNull: true)]
-    #[Assert\Type('numeric')]
     public ?float $eps;
-
-    #[Assert\NotBlank(allowNull: true)]
-    #[Assert\Type('numeric')]
     public ?float $pe;
-
-    #[Assert\Type('object')]
-    //FIXME как сделать проверку на DateTime?
     public ?\DateTimeImmutable $earningsAnnouncement;
-
-    #[Assert\Type('numeric')]
     public int $sharesOutstanding;
+    public \DateTimeImmutable $apiTimestamp;
 
-    #[Assert\Type('object')]
-    //FIXME как сделать проверку на DateTime?
-    public \DateTimeImmutable $timestamp; //Quote->apiTimestamp
+    /**
+     * @throws ExceptionInterface
+     */
+    public static function create(array $response): QuoteResponse
+    {
+        $response['apiTimestamp'] = $response['timestamp'];
+        unset($response['timestamp']);
 
+        return parent::denormalize($response);
+    }
 
     /**
      * @throws Exception
@@ -85,9 +52,11 @@ class QuoteResponse
         }
     }
 
-    public function setTimestamp(int $timestamp): QuoteResponse
+    public function setApiTimestamp(int $timestamp): QuoteResponse
     {
-        $this->timestamp = DateTimeImmutable::createFromFormat('U',$timestamp);
+        $this->apiTimestamp = DateTimeImmutable::createFromFormat('U', $timestamp);
         return $this;
     }
+
+
 }

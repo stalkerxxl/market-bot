@@ -24,14 +24,13 @@ class ApiRequestSubscriber implements EventSubscriberInterface
                 ['updateQuote'],
                 ['uploadAvatar']
             ],
-           /* QuoteUpdatedEvent::class => [],*/
+            /* QuoteUpdatedEvent::class => [],*/
         ];
     }
 
     public function updateQuote(ProfileUpdatedEvent $event)
     {
-        if (null == $event->getCompany()->getQuote())
-            $this->messageBus->dispatch(new QuoteRequest($event->getCompany()->getSymbol()));
+        $this->messageBus->dispatch(new QuoteRequest($event->getCompanyId()));
     }
 
     public function uploadAvatar(ProfileUpdatedEvent $event)

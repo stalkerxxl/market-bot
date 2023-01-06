@@ -7,16 +7,16 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class ProfileUpdatedEvent extends Event
 {
-    private Company $company;
+    private int $companyId;
 
-    public function __construct(Company $company)
+    public function __construct(int $companyId)
     {
-        $this->company = $company;
+        $this->companyId = $companyId;
     }
 
-    public function getCompany(): Company
+    public function getCompanyId(): int
     {
-        return $this->company;
+        return $this->companyId;
     }
 
 }

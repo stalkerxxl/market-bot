@@ -4,15 +4,15 @@ namespace App\Message;
 
 final class QuoteRequest
 {
-    private string $symbol;
+    private int $companyId;
 
-    public function __construct(string $symbol)
+    public function __construct(int $companyId)
     {
-        $this->symbol = $symbol;
+        $this->companyId = $companyId;
     }
 
-    public function getSymbol(): string
+    public function getCompanyId(): int
     {
-        return $this->symbol;
+        return $this->companyId;
     }
 }
