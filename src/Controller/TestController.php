@@ -21,7 +21,7 @@ class TestController extends AbstractController
     #[Route('/', name: 'app_test_index')]
     public function index(): Response
     {
-        $this->getProfile('BA');
+        $this->getProfile('META');
         return $this->render('test/index.html.twig', [
             'controller_name' => 'TestController',
         ]);

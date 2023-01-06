@@ -44,8 +44,8 @@ abstract class AbstractRequestHandler
     protected function getPropertyAccessor(): PropertyAccessorInterface
     {
         return PropertyAccess::createPropertyAccessorBuilder()
-            ->disableExceptionOnInvalidPropertyPath()
-            ->disableExceptionOnInvalidIndex()
+            //->disableExceptionOnInvalidPropertyPath()
+            //->disableExceptionOnInvalidIndex()
             ->getPropertyAccessor();
     }
 

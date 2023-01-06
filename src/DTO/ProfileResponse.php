@@ -25,7 +25,7 @@ final class ProfileResponse extends AbstractResponse
     public ?string $zip;
     public ?float $dcfDiff;
     public ?float $dcf;
-    public string $image; //Company->imageUrl
+    public string $imageUrl;
     public \DateTimeImmutable $ipoDate;
     public string $sector; //Sector->name
     public string $industry; //Industry->name
@@ -36,7 +36,8 @@ final class ProfileResponse extends AbstractResponse
     public static function create(array $response): self
     {
         $response['name'] = $response['companyName'];
-        unset($response['companyName']);
+        $response['imageUrl'] = $response['image'];
+        unset($response['companyName'], $response['image']);
 
         return parent::denormalize($response);
     }
