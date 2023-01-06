@@ -67,4 +67,13 @@ class FmpClient
         $this->endpoint = strtolower($index->name) . '_constituent';
         return $this->_send();
     }
+
+    /**
+     * @throws FmpClientException
+     */
+    public function getStockPriceChange(string $symbol): array
+    {
+        $this->endpoint = 'stock-price-change/' . $symbol;
+        return $this->_send();
+    }
 }

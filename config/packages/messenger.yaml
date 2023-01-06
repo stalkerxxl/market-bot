@@ -13,6 +13,7 @@ framework:
             App\Message\ProfileRequest: async            # Route your messages to the transports
             App\Message\QuoteRequest: async
             App\Message\IndexListRequest: async
+            App\Message\PerformanceRequest: async
             # 'App\Message\YourMessage': async
 
 # when@test:

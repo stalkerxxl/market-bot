@@ -3,9 +3,13 @@
 namespace App\Controller;
 
 use App\ApiClient\FmpClient;
+use App\Entity\Company;
 use App\Enum\IndexList;
 use App\Message\IndexListRequest;
+use App\Message\PerformanceRequest;
 use App\Message\ProfileRequest;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -16,17 +20,20 @@ class TestController extends AbstractController
 {
     private MessageBusInterface $messageBus;
     private FmpClient $fmpClient;
+    private EntityManagerInterface $entityManager;
 
-    public function __construct(MessageBusInterface $messageBus, FmpClient $fmpClient)
+    public function __construct(MessageBusInterface $messageBus, FmpClient $fmpClient, EntityManagerInterface $entityManager)
     {
         $this->messageBus = $messageBus;
         $this->fmpClient = $fmpClient;
+        $this->entityManager = $entityManager;
     }
 
     #[Route('/', name: 'app_test_index')]
     public function index(): Response
     {
-        $this->getIndexList(IndexList::SP500);
+        $this->getPerformance();
+        //$this->getIndexList(IndexList::SP500);
         //$this->getProfile('META');
         return $this->render('test/index.html.twig', [
             'controller_name' => 'TestController',
@@ -45,7 +52,21 @@ class TestController extends AbstractController
     public function getIndexList(IndexList $index)
     {
         $this->messageBus->dispatch(new IndexListRequest($index));
-       /* $data = $this->fmpClient->getIndexList($index);
-        dump(array_column($data,'symbol'));*/
+        /* $data = $this->fmpClient->getIndexList($index);
+         dump(array_column($data,'symbol'));*/
+    }
+
+    public function getPerformance()
+    {
+        $repo = $this->entityManager->getRepository(Company::class);
+        $data = $repo->findAll();
+        $l = [];
+        $unique = array_map(function ($item) {
+            return $item->getId();
+        }, $data);
+
+        foreach ($unique as $companyId) {
+            $this->messageBus->dispatch(new PerformanceRequest($companyId));
+        }
     }
 }

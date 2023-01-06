@@ -14,7 +14,7 @@ class Performance
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(inversedBy: 'day1', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'performance', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Company $company = null;
 
