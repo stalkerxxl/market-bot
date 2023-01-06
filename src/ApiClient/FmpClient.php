@@ -2,6 +2,7 @@
 
 namespace App\ApiClient;
 
+use App\Enum\IndexList;
 use App\Exception\FmpClientException;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -55,6 +56,15 @@ class FmpClient
     public function getQuote(string $symbol): array
     {
         $this->endpoint = 'quote/' . $symbol;
+        return $this->_send();
+    }
+
+    /**
+     * @throws FmpClientException
+     */
+    public function getIndexList(IndexList $index): array
+    {
+        $this->endpoint = strtolower($index->name) . '_constituent';
         return $this->_send();
     }
 }
