@@ -61,10 +61,10 @@ class Company
     #[ORM\Column(length: 255)]
     private ?string $city = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $state = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $zip = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
@@ -279,7 +279,7 @@ class Company
         return $this->state;
     }
 
-    public function setState(string $state): self
+    public function setState(?string $state): self
     {
         $this->state = $state;
 
@@ -291,7 +291,7 @@ class Company
         return $this->zip;
     }
 
-    public function setZip(string $zip): self
+    public function setZip(?string $zip): self
     {
         $this->zip = $zip;
 

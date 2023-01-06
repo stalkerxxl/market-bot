@@ -36,7 +36,7 @@ final class ProfileRequestHandler extends AbstractRequestHandler
             $this->eventDispatcher->dispatch(new ProfileUpdatedEvent($company->getId()));
 
         } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
+            $this->logger->error($e->getMessage(), ['exception' => $e]);
             throw $e;
         }
     }

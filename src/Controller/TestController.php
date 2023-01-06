@@ -26,7 +26,7 @@ class TestController extends AbstractController
     #[Route('/', name: 'app_test_index')]
     public function index(): Response
     {
-        $this->getIndexList(IndexList::DOWJONES);
+        $this->getIndexList(IndexList::SP500);
         //$this->getProfile('META');
         return $this->render('test/index.html.twig', [
             'controller_name' => 'TestController',
@@ -44,7 +44,7 @@ class TestController extends AbstractController
 
     public function getIndexList(IndexList $index)
     {
-        $this->messageBus->dispatch(new IndexListRequest(IndexList::DOWJONES));
+        $this->messageBus->dispatch(new IndexListRequest($index));
        /* $data = $this->fmpClient->getIndexList($index);
         dump(array_column($data,'symbol'));*/
     }
