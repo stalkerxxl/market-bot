@@ -11,16 +11,25 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/test', name: 'app_test')]
 class TestController extends AbstractController
 {
+    private MessageBusInterface $messageBus;
+
+    public function __construct(MessageBusInterface $messageBus)
+    {
+        $this->messageBus = $messageBus;
+    }
+
     #[Route('/', name: 'app_test_index')]
     public function index(): Response
     {
+        $this->getProfile('MSFT');
         return $this->render('test/index.html.twig', [
             'controller_name' => 'TestController',
         ]);
     }
-    #[Route('/get-profile/{symbol}', name: 'app_test_get_profile')]
-    public function getProfile(string $symbol, MessageBusInterface $messageBus){
-        $messageBus->dispatch(new ProfileRequest($symbol));
+
+    public function getProfile(string $symbol): Response
+    {
+        $this->messageBus->dispatch(new ProfileRequest($symbol));
 
         return $this->render('test/index.html.twig', [
             'controller_name' => 'TestController',

@@ -2,7 +2,6 @@
 
 namespace App\MessageHandler;
 
-use App\ApiClient\FmpClient;
 use App\DTO\ProfileResponse;
 use App\Entity\Company;
 use App\Entity\Industry;
@@ -10,43 +9,13 @@ use App\Entity\Sector;
 use App\Event\ProfileUpdatedEvent;
 use App\Exception\FmpClientException;
 use App\Message\ProfileRequest;
-use Doctrine\ORM\EntityManagerInterface;
-use Psr\EventDispatcher\EventDispatcherInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Validator\Exception\ValidatorException;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 #[AsMessageHandler]
-final class ProfileRequestHandler
+final class ProfileRequestHandler extends AbstractRequestHandler
 {
-    private FmpClient $client;
-    private LoggerInterface $logger;
-    private EntityManagerInterface $entityManager;
-    private ValidatorInterface $validator;
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(
-        FmpClient                $client,
-        LoggerInterface          $logger,
-        EntityManagerInterface   $entityManager,
-        ValidatorInterface       $validator,
-        EventDispatcherInterface $eventDispatcher)
-    {
-        $this->client = $client;
-        $this->logger = $logger;
-        $this->entityManager = $entityManager;
-        $this->validator = $validator;
-        $this->eventDispatcher = $eventDispatcher;
-    }
-
     /**
      * @throws ExceptionInterface
      * @throws FmpClientException
@@ -55,14 +24,10 @@ final class ProfileRequestHandler
     {
         try {
             $response = $this->client->getProfile($message->getSymbol());
-            $dto = (new ObjectNormalizer())
-                ->denormalize($response[0], ProfileResponse::class);
+            $dto = ProfileResponse::create($response[0]);
 
-            $errors = $this->validator->validate($dto);
-            if ($errors->count() > 0) {
-                $this->logger->alert('validation error', [$dto->symbol, $dto->companyName]);
-                throw new ValidatorException($dto->symbol . ': ' . (string)$errors);
-            }
+            //FIXME валидировать Entity, а не DTO
+            $this->validateEntity($dto);
 
             $sector = $this->makeSector($dto);
             $industry = $this->makeIndustry($dto, $sector);
@@ -112,25 +77,9 @@ final class ProfileRequestHandler
             $company->setSymbol($dto->symbol);
             $this->entityManager->persist($company);
         }
-        $company->setName($dto->companyName)
-            ->setBeta($dto->beta)
-            ->setLastDiv($dto->lastDiv)
-            ->setCik($dto->cik)
-            ->setWebsite($dto->website)
-            ->setDescription($dto->description)
-            ->setCeo($dto->ceo)
-            ->setCountry($dto->country)
-            ->setFullTimeEmployees($dto->fullTimeEmployees)
-            ->setPhone($dto->phone)
-            ->setAddress($dto->address)
-            ->setCity($dto->city)
-            ->setState($dto->state)
-            ->setZip($dto->zip)
-            ->setDcfDiff($dto->dcfDiff)
-            ->setDcf($dto->dcf)
-            ->setImageUrl($dto->image)
-            ->setIpoDate($dto->ipoDate)
-            ->setSector($sector)
+        unset($dto->industry, $dto->sector);
+        $this->hydrateEntityFromDTO($company, $dto);
+        $company->setSector($sector)
             ->setIndustry($industry);
 
         return $company;

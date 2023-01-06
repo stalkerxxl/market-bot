@@ -10,8 +10,8 @@ framework:
             sync: 'sync://'
 
         routing:
-            App\Message\ProfileRequest: sync            # Route your messages to the transports
-            App\Message\QuoteRequest: sync
+            App\Message\ProfileRequest: async            # Route your messages to the transports
+            App\Message\QuoteRequest: async
             # 'App\Message\YourMessage': async
 
 # when@test:

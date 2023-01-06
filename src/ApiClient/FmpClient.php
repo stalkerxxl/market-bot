@@ -3,13 +3,8 @@
 namespace App\ApiClient;
 
 use App\Exception\FmpClientException;
-use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 
 class FmpClient
 {
@@ -39,7 +34,7 @@ class FmpClient
                 'apikey' => $this->apiKey
             ]]);
             return $response->toArray();
-        } catch (\Symfony\Contracts\HttpClient\Exception\ExceptionInterface $e) {
+        } catch (ExceptionInterface $e) {
             throw new FmpClientException($e->getMessage(), $e->getCode(), $e);
         }
     }
