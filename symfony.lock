@@ -35,6 +35,9 @@
             "migrations/.gitignore"
         ]
     },
+    "rewieer/taskschedulerbundle": {
+        "version": "0.11.0"
+    },
     "stof/doctrine-extensions-bundle": {
         "version": "1.7",
         "recipe": {
@@ -185,5 +188,8 @@
             "config/packages/web_profiler.yaml",
             "config/routes/web_profiler.yaml"
         ]
+    },
+    "zenstruck/schedule-bundle": {
+        "version": "v1.5.0"
     }
 }

@@ -28,7 +28,8 @@
         "symfony/runtime": "6.2.*",
         "symfony/serializer": "6.2.*",
         "symfony/validator": "6.2.*",
-        "symfony/yaml": "6.2.*"
+        "symfony/yaml": "6.2.*",
+        "zenstruck/schedule-bundle": "^1.5"
     },
     "config": {
         "allow-plugins": {
