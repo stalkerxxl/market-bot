@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CompanyRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation\Slug;
@@ -103,6 +105,14 @@ class Company
 
     #[ORM\OneToOne(mappedBy: 'company', cascade: ['persist', 'remove'])]
     private ?Performance $performance = null;
+
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Roaster::class, orphanRemoval: true)]
+    private Collection $roasters;
+
+    public function __construct()
+    {
+        $this->roasters = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -439,6 +449,36 @@ class Company
         }
 
         $this->performance = $performance;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Roaster>
+     */
+    public function getRoasters(): Collection
+    {
+        return $this->roasters;
+    }
+
+    public function addRoaster(Roaster $roaster): self
+    {
+        if (!$this->roasters->contains($roaster)) {
+            $this->roasters->add($roaster);
+            $roaster->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRoaster(Roaster $roaster): self
+    {
+        if ($this->roasters->removeElement($roaster)) {
+            // set the owning side to null (unless already changed)
+            if ($roaster->getCompany() === $this) {
+                $roaster->setCompany(null);
+            }
+        }
 
         return $this;
     }

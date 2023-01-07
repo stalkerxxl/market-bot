@@ -4,8 +4,9 @@
 3. [X] Company
 4. [X] Quote
 5. [X] Performance
-6. [ ] Insider
-7. [ ] Transaction
+6. [ ] Roaster
+7. [ ] Insider
+8. [ ] Transaction
 
 **Api Endpoint Jobs**
 1. [X] ProfileRequest
