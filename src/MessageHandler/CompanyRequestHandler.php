@@ -2,28 +2,28 @@
 
 namespace App\MessageHandler;
 
-use App\DTO\ProfileResponse;
+use App\DTO\CompanyResponse;
 use App\Entity\Company;
 use App\Entity\Industry;
 use App\Entity\Sector;
-use App\Event\ProfileUpdatedEvent;
+use App\Event\CompanyUpdatedEvent;
 use App\Exception\FmpClientException;
-use App\Message\ProfileRequest;
+use App\Message\CompanyRequest;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 #[AsMessageHandler]
-final class ProfileRequestHandler extends AbstractRequestHandler
+final class CompanyRequestHandler extends AbstractRequestHandler
 {
     /**
      * @throws ExceptionInterface
      * @throws FmpClientException
      */
-    public function __invoke(ProfileRequest $message): void
+    public function __invoke(CompanyRequest $message): void
     {
         try {
             $response = $this->client->getProfile($message->getSymbol());
-            $dto = ProfileResponse::create($response[0]);
+            $dto = CompanyResponse::create($response[0]);
 
             //FIXME валидировать Entity, а не DTO
             $this->validateEntity($dto);
@@ -33,7 +33,7 @@ final class ProfileRequestHandler extends AbstractRequestHandler
             $company = $this->makeCompany($dto, $sector, $industry);
 
             $this->entityManager->flush();
-            $this->eventDispatcher->dispatch(new ProfileUpdatedEvent($company->getId()));
+            $this->eventDispatcher->dispatch(new CompanyUpdatedEvent($company->getId()));
 
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage(), ['exception' => $e]);
@@ -41,7 +41,7 @@ final class ProfileRequestHandler extends AbstractRequestHandler
         }
     }
 
-    private function makeSector(ProfileResponse $dto): Sector
+    private function makeSector(CompanyResponse $dto): Sector
     {
         $sectorRepository = $this->entityManager->getRepository(Sector::class);
         $sector = $sectorRepository->findOneBy(['name' => $dto->sector]);
@@ -53,7 +53,7 @@ final class ProfileRequestHandler extends AbstractRequestHandler
         return $sector;
     }
 
-    private function makeIndustry(ProfileResponse $dto, Sector $sector): Industry
+    private function makeIndustry(CompanyResponse $dto, Sector $sector): Industry
     {
         $industryRepository = $this->entityManager->getRepository(Industry::class);
         $industry = $industryRepository->findOneBy(['name' => $dto->industry]);
@@ -67,7 +67,7 @@ final class ProfileRequestHandler extends AbstractRequestHandler
         return $industry;
     }
 
-    private function makeCompany(ProfileResponse $dto, Sector $sector, Industry $industry): Company
+    private function makeCompany(CompanyResponse $dto, Sector $sector, Industry $industry): Company
     {
         $companyRepository = $this->entityManager->getRepository(Company::class);
         $company = $companyRepository->findOneBy(['symbol' => $dto->symbol]);

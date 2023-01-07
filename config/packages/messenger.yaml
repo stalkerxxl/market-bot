@@ -10,11 +10,12 @@ framework:
             sync: 'sync://'
 
         routing:
-            App\Message\ProfileRequest: async            # Route your messages to the transports
+            App\Message\CompanyRequest: async            # Route your messages to the transports
             App\Message\QuoteRequest: async
             App\Message\IndexListRequest: async
             App\Message\PerformanceRequest: async
             App\Message\DownloadCompanyLogo: async
+            App\Message\RoasterRequest: async
             # 'App\Message\YourMessage': async
 
 # when@test:

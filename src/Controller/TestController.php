@@ -8,7 +8,8 @@ use App\Enum\IndexList;
 use App\Message\DownloadCompanyLogo;
 use App\Message\IndexListRequest;
 use App\Message\PerformanceRequest;
-use App\Message\ProfileRequest;
+use App\Message\CompanyRequest;
+use App\Message\RoasterRequest;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -33,8 +34,9 @@ class TestController extends AbstractController
     #[Route('/', name: 'app_test_index')]
     public function index(): Response
     {
+        $this->getRoasters();
         //$this->getPerformance();
-        $this->getCompanyLogo();
+        //$this->getCompanyLogo();
         //$this->getIndexList(IndexList::SP500);
         //$this->getProfile('META');
         return $this->render('test/index.html.twig', [
@@ -44,7 +46,7 @@ class TestController extends AbstractController
 
     public function getProfile(string $symbol): Response
     {
-        $this->messageBus->dispatch(new ProfileRequest($symbol));
+        $this->messageBus->dispatch(new CompanyRequest($symbol));
 
         return $this->render('test/index.html.twig', [
             'controller_name' => 'TestController',
@@ -82,5 +84,9 @@ class TestController extends AbstractController
         foreach ($unique as $companyId) {
             $this->messageBus->dispatch(new DownloadCompanyLogo($companyId));
         }
+    }
+
+    public function getRoasters(){
+        $this->messageBus->dispatch(new RoasterRequest(1));
     }
 }

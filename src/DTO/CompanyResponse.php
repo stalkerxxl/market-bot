@@ -5,7 +5,7 @@ namespace App\DTO;
 use Exception;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
-final class ProfileResponse extends AbstractResponse
+final class CompanyResponse extends AbstractResponse
 {
     public string $symbol;
     //$response['companyName']
@@ -45,7 +45,7 @@ final class ProfileResponse extends AbstractResponse
     /**
      * @throws Exception
      */
-    public function setIpoDate(string $ipoDate): ProfileResponse
+    public function setIpoDate(string $ipoDate): CompanyResponse
     {
         $this->ipoDate = new \DateTimeImmutable($ipoDate);
         return $this;

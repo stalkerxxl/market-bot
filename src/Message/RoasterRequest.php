@@ -1,11 +1,8 @@
 <?php
 
-namespace App\Event;
+namespace App\Message;
 
-use App\Entity\Company;
-use Symfony\Contracts\EventDispatcher\Event;
-
-class ProfileUpdatedEvent extends Event
+final class RoasterRequest
 {
     private int $companyId;
 
@@ -18,5 +15,4 @@ class ProfileUpdatedEvent extends Event
     {
         return $this->companyId;
     }
-
 }

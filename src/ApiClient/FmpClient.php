@@ -14,6 +14,7 @@ class FmpClient
     private string $apiKey;
     private string $apiVersion = 'v3';
     private string $endpoint = '';
+    private array $params;
 
     public function __construct(HttpClientInterface $client, $baseUrl, $apiKey)
     {
@@ -29,11 +30,10 @@ class FmpClient
     private function _send(): array
     {
         $url = $this->baseUrl . '/' . $this->apiVersion . '/' . $this->endpoint;
+        $this->params['apikey'] = $this->apiKey;
 
         try {
-            $response = $this->client->request('GET', $url, ['query' => [
-                'apikey' => $this->apiKey
-            ]]);
+            $response = $this->client->request('GET', $url, ['query' => $this->params]);
             return $response->toArray();
         } catch (ExceptionInterface $e) {
             throw new FmpClientException($e->getMessage(), $e->getCode(), $e);
@@ -46,7 +46,6 @@ class FmpClient
     public function getProfile(string $symbol): array
     {
         $this->endpoint = 'profile/' . strtoupper($symbol);
-
         return $this->_send();
     }
 
@@ -74,6 +73,20 @@ class FmpClient
     public function getStockPriceChange(string $symbol): array
     {
         $this->endpoint = 'stock-price-change/' . $symbol;
+        return $this->_send();
+    }
+
+    /**
+     * @throws FmpClientException
+     */
+    public function getInsiderRoasterStatistic(string $symbol): array
+    {
+        $this->apiVersion = 'v4';
+        $this->endpoint = 'insider-roaster-statistic/';
+        $this->params = [
+            'symbol' => strtoupper($symbol)
+        ];
+
         return $this->_send();
     }
 }

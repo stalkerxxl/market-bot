@@ -17,8 +17,8 @@ class Roaster
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-    private ?\DateTimeImmutable $year = null;
+    #[ORM\Column]
+    private ?int $year = null;
 
     #[ORM\Column]
     private ?int $quarter = null;
@@ -67,12 +67,12 @@ class Roaster
         return $this->id;
     }
 
-    public function getYear(): ?\DateTimeImmutable
+    public function getYear(): ?int
     {
         return $this->year;
     }
 
-    public function setYear(\DateTimeImmutable $year): self
+    public function setYear(int $year): self
     {
         $this->year = $year;
 

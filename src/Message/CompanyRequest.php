@@ -2,7 +2,7 @@
 
 namespace App\Message;
 
-final class ProfileRequest
+final class CompanyRequest
 {
     private string $symbol;
 
