@@ -2,29 +2,35 @@
 
 namespace App\EventSubscriber;
 
+use App\Entity\Company;
 use App\Event\IndexListUpdatedEvent;
 use App\Event\CompanyUpdatedEvent;
 use App\Event\QuoteUpdatedEvent;
 use App\Message\CompanyRequest;
+use App\Message\DownloadCompanyLogo;
+use App\Message\PerformanceRequest;
 use App\Message\QuoteRequest;
+use App\Message\RoasterRequest;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 class ApiRequestSubscriber implements EventSubscriberInterface
 {
     private MessageBusInterface $messageBus;
+    private EntityManagerInterface $entityManager;
 
-    public function __construct(MessageBusInterface $messageBus)
+    public function __construct(MessageBusInterface $messageBus, EntityManagerInterface $entityManager)
     {
         $this->messageBus = $messageBus;
+        $this->entityManager = $entityManager;
     }
 
     public static function getSubscribedEvents(): array
     {
         return [
             CompanyUpdatedEvent::class => [
-                ['updateQuote'],
-                ['uploadAvatar']
+                ['onCompanyUpdated']
             ],
             IndexListUpdatedEvent::class => [
                 ['onIndexListUpdated']
@@ -33,19 +39,33 @@ class ApiRequestSubscriber implements EventSubscriberInterface
         ];
     }
 
+    public function onCompanyUpdated(CompanyUpdatedEvent $event)
+    {
+        $company = $this->entityManager->getRepository(Company::class)->find($event->getCompanyId());
+
+        if (is_null($company->getAvatar()))
+            $this->messageBus->dispatch(new DownloadCompanyLogo($company->getId()));
+
+        if (is_null($company->getQuote()))
+            $this->messageBus->dispatch(new QuoteRequest($company->getId()));
+
+        if (is_null($company->getRoasters()))
+            $this->messageBus->dispatch(new RoasterRequest($company->getId()));
+
+        if (is_null($company->getPerformance()))
+            $this->messageBus->dispatch(new PerformanceRequest($company->getId()));
+    }
+
     public function onIndexListUpdated(IndexListUpdatedEvent $event)
     {
-        foreach ($event->getIndexList()->symbols as $symbol) {
+        $companyInDB = $this->entityManager->getRepository(Company::class)->findAll();
+        $symbols = array_map(function ($item) {
+            return $item->getSymbol();
+        }, $companyInDB);
+        $fullUniqueList = array_unique(array_merge($symbols, $event->getIndexList()->symbols));
+
+        foreach ($fullUniqueList as $symbol) {
             $this->messageBus->dispatch(new CompanyRequest($symbol));
         }
-    }
-
-    public function updateQuote(CompanyUpdatedEvent $event)
-    {
-        $this->messageBus->dispatch(new QuoteRequest($event->getCompanyId()));
-    }
-
-    public function uploadAvatar(CompanyUpdatedEvent $event)
-    {
     }
 }

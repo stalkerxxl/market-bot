@@ -37,8 +37,11 @@ class TestController extends AbstractController
     #[Route('/', name: 'app_test_index')]
     public function index(): Response
     {
-        $f = IndexList::class;
-        dump($f);
+        $companyInDB = $this->entityManager->getRepository(Company::class)->findAll();
+        $symbols = array_map(function ($item) {
+            return $item->getSymbol();
+        }, $companyInDB);
+        dump($symbols);
         //$this->getRoasters();
         //$this->getPerformance();
         //$this->getCompanyLogo();
