@@ -36,7 +36,7 @@ final class CompanyRequestHandler extends AbstractRequestHandler
             $this->eventDispatcher->dispatch(new CompanyUpdatedEvent($company->getId()));
 
         } catch (\Exception $e) {
-            $this->logger->error($e->getMessage(), ['exception' => $e]);
+            $this->logger->error($e->getMessage(), ['symbol' => $message->getSymbol()]);
             throw $e;
         }
     }

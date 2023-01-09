@@ -37,16 +37,20 @@ class TestController extends AbstractController
     #[Route('/', name: 'app_test_index')]
     public function index(): Response
     {
-        $companyInDB = $this->entityManager->getRepository(Company::class)->findAll();
+       /* $companyInDB = $this->entityManager->getRepository(Company::class)->findAll();
+
         $symbols = array_map(function ($item) {
             return $item->getSymbol();
         }, $companyInDB);
-        dump($symbols);
-        //$this->getRoasters();
+
+        foreach ($symbols as $symbol){
+
+            $this->getRoasters($id);
+        }*/
         //$this->getPerformance();
         //$this->getCompanyLogo();
         //$this->getIndexList();
-        //$this->getProfile('META');
+        $this->getProfile('GEHC2222');
         return $this->render('test/index.html.twig', [
             'controller_name' => 'TestController',
         ]);
@@ -94,8 +98,8 @@ class TestController extends AbstractController
         }
     }
 
-    public function getRoasters()
+    public function getRoasters(int $id)
     {
-        $this->messageBus->dispatch(new RoasterRequest(1));
+        $this->messageBus->dispatch(new RoasterRequest($id));
     }
 }

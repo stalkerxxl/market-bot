@@ -49,7 +49,7 @@ class ApiRequestSubscriber implements EventSubscriberInterface
         if (is_null($company->getQuote()))
             $this->messageBus->dispatch(new QuoteRequest($company->getId()));
 
-        if (is_null($company->getRoasters()))
+        if ($company->getRoasters()->count() == 0)
             $this->messageBus->dispatch(new RoasterRequest($company->getId()));
 
         if (is_null($company->getPerformance()))
