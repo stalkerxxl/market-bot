@@ -46,14 +46,9 @@ class ApiRequestSubscriber implements EventSubscriberInterface
         if (is_null($company->getAvatar()))
             $this->messageBus->dispatch(new DownloadCompanyLogo($company->getId()));
 
-        if (is_null($company->getQuote()))
-            $this->messageBus->dispatch(new QuoteRequest($company->getId()));
-
-        if ($company->getRoasters()->count() == 0)
-            $this->messageBus->dispatch(new RoasterRequest($company->getId()));
-
-        if (is_null($company->getPerformance()))
-            $this->messageBus->dispatch(new PerformanceRequest($company->getId()));
+        $this->messageBus->dispatch(new QuoteRequest($company->getId()));
+        $this->messageBus->dispatch(new RoasterRequest($company->getId()));
+        $this->messageBus->dispatch(new PerformanceRequest($company->getId()));
     }
 
     public function onIndexListUpdated(IndexListUpdatedEvent $event)
