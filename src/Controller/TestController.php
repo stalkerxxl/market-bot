@@ -24,20 +24,23 @@ class TestController extends AbstractController
     private FmpClient $fmpClient;
     private EntityManagerInterface $entityManager;
 
-    public function __construct(MessageBusInterface $messageBus, FmpClient $fmpClient, EntityManagerInterface $entityManager)
+    public function __construct(
+        MessageBusInterface    $messageBus,
+        FmpClient              $fmpClient,
+        EntityManagerInterface $entityManager)
     {
-        $this->messageBus = $messageBus;
-        $this->fmpClient = $fmpClient;
         $this->entityManager = $entityManager;
+        $this->fmpClient = $fmpClient;
+        $this->messageBus = $messageBus;
     }
 
     #[Route('/', name: 'app_test_index')]
     public function index(): Response
     {
-        $this->getRoasters();
+        //$this->getRoasters();
         //$this->getPerformance();
         //$this->getCompanyLogo();
-        //$this->getIndexList(IndexList::SP500);
+        $this->getIndexList();
         //$this->getProfile('META');
         return $this->render('test/index.html.twig', [
             'controller_name' => 'TestController',
@@ -53,7 +56,7 @@ class TestController extends AbstractController
         ]);
     }
 
-    public function getIndexList(IndexList $index)
+    public function getIndexList(IndexList $index = null)
     {
         $this->messageBus->dispatch(new IndexListRequest($index));
         /* $data = $this->fmpClient->getIndexList($index);
@@ -86,7 +89,8 @@ class TestController extends AbstractController
         }
     }
 
-    public function getRoasters(){
+    public function getRoasters()
+    {
         $this->messageBus->dispatch(new RoasterRequest(1));
     }
 }

@@ -3,6 +3,7 @@
 namespace App\MessageHandler;
 
 use App\DTO\IndexListResponse;
+use App\Enum\IndexList;
 use App\Event\IndexListUpdatedEvent;
 use App\Exception\FmpClientException;
 use App\Message\IndexListRequest;
@@ -18,10 +19,18 @@ final class IndexListRequestHandler extends AbstractRequestHandler
     public function __invoke(IndexListRequest $message)
     {
         try {
-            $response = $this->client->getIndexList($message->getIndex());
+            if ($message->getIndex()) {
+                $response = $this->client->getIndexList($message->getIndex());
+                $dto = IndexListResponse::create($response);
+            } else {
+                $fullList = [];
+                foreach (IndexList::cases() as $index) {
+                    $response = $this->client->getIndexList($index);
+                    $fullList = array_merge($fullList, $response);
+                }
+                $dto = IndexListResponse::create($fullList);
+            }
             //FIXME валидация?
-            $dto = IndexListResponse::create($response);
-
             $this->eventDispatcher->dispatch(new IndexListUpdatedEvent($dto));
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());

@@ -13,7 +13,7 @@ class IndexListResponse extends AbstractResponse
      */
     public static function create(array $response): IndexListResponse
     {
-        $data['symbols'] = array_column($response, 'symbol');
+        $data['symbols'] = array_unique(array_column($response, 'symbol'));
         return parent::denormalize($data);
     }
 }
