@@ -12,7 +12,7 @@ framework:
         routing:
             App\Message\CompanyRequest: async            # Route your messages to the transports
             App\Message\QuoteRequest: async
-            App\Message\IndexListRequest: sync
+            App\Message\IndexListRequest: async
             App\Message\PerformanceRequest: async
             App\Message\DownloadCompanyLogo: async
             App\Message\RoasterRequest: async

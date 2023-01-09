@@ -37,10 +37,12 @@ class TestController extends AbstractController
     #[Route('/', name: 'app_test_index')]
     public function index(): Response
     {
+        $f = IndexList::class;
+        dump($f);
         //$this->getRoasters();
         //$this->getPerformance();
         //$this->getCompanyLogo();
-        $this->getIndexList();
+        //$this->getIndexList();
         //$this->getProfile('META');
         return $this->render('test/index.html.twig', [
             'controller_name' => 'TestController',
