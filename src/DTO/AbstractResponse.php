@@ -7,13 +7,13 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 abstract class AbstractResponse
 {
-    abstract public static function create(array $response);
+    abstract protected static function create(array $response);
 
     /**
      * @throws ExceptionInterface
      */
     protected static function denormalize(array $response): static
-    {
+    {//FIXME переделать, чтоб принимал также частично заполненный объект DTO?
         return (new ObjectNormalizer())
             ->denormalize($response, static::class);
     }

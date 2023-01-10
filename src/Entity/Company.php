@@ -109,9 +109,13 @@ class Company
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Roaster::class, orphanRemoval: true)]
     private Collection $roasters;
 
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Transaction::class, orphanRemoval: true)]
+    private Collection $transactions;
+
     public function __construct()
     {
         $this->roasters = new ArrayCollection();
+        $this->transactions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -477,6 +481,36 @@ class Company
             // set the owning side to null (unless already changed)
             if ($roaster->getCompany() === $this) {
                 $roaster->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Transaction>
+     */
+    public function getTransactions(): Collection
+    {
+        return $this->transactions;
+    }
+
+    public function addTransaction(Transaction $transaction): self
+    {
+        if (!$this->transactions->contains($transaction)) {
+            $this->transactions->add($transaction);
+            $transaction->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTransaction(Transaction $transaction): self
+    {
+        if ($this->transactions->removeElement($transaction)) {
+            // set the owning side to null (unless already changed)
+            if ($transaction->getCompany() === $this) {
+                $transaction->setCompany(null);
             }
         }
 
