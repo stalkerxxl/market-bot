@@ -77,4 +77,35 @@ class FmpApiServiceTest extends KernelTestCase
             $this->mockResponse->getRequestUrl()
         );
     }
+
+    /**
+     * @covers \App\Service\FmpApiService::_send
+     */
+    public function testIfResponseStatusNot200(): void
+    {
+        $responseCode = rand(300, 550);
+        $mockResponse = new MockResponse(json_encode(['data' => 'foobar']), ['http_code' => $responseCode]);
+        $mockHttpClient = new MockHttpClient($mockResponse, self::API_URL);
+        $fmpService = new FmpApiService($mockHttpClient);
+
+        $this->expectException(FmpClientException::class);
+        $this->expectExceptionCode($responseCode);
+
+        $fmpService->getProfile('aapl');
+    }
+
+    /**
+     * @covers \App\Service\FmpApiService::_send
+     */
+    public function testIfResponseIsEmpty()
+    {
+        $mockResponse = new MockResponse('');
+        $mockHttpClient = new MockHttpClient($mockResponse, self::API_URL);
+        $fmpService = new FmpApiService($mockHttpClient);
+
+        $this->expectException(FmpClientException::class);
+        $this->expectExceptionMessage('Response body is empty.');
+
+        $fmpService->getProfile('aapl');
+    }
 }
