@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\ApiClient\FmpClient;
+use App\Service\FmpApiService;
 use App\Entity\Company;
 use App\Enum\IndexList;
 use App\Message\DownloadCompanyLogo;
@@ -21,12 +21,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class TestController extends AbstractController
 {
     private MessageBusInterface $messageBus;
-    private FmpClient $fmpClient;
+    private FmpApiService $fmpClient;
     private EntityManagerInterface $entityManager;
 
     public function __construct(
         MessageBusInterface    $messageBus,
-        FmpClient              $fmpClient,
+        FmpApiService          $fmpClient,
         EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;

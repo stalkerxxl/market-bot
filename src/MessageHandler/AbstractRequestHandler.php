@@ -2,7 +2,7 @@
 
 namespace App\MessageHandler;
 
-use App\ApiClient\FmpClient;
+use App\Service\FmpApiService;
 use App\DTO\AbstractResponse;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -14,14 +14,14 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 abstract class AbstractRequestHandler
 {
-    protected FmpClient $client;
+    protected FmpApiService $client;
     protected LoggerInterface $logger;
     protected EntityManagerInterface $entityManager;
     protected ValidatorInterface $validator;
     protected EventDispatcherInterface $eventDispatcher;
 
     public function __construct(
-        FmpClient                $client,
+        FmpApiService            $client,
         LoggerInterface          $logger,
         EntityManagerInterface   $entityManager,
         ValidatorInterface       $validator,

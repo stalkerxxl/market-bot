@@ -25,7 +25,3 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-    App\ApiClient\FmpClient:
-        arguments:
-            $baseUrl: "%env(FMP_API_URL)%"
-            $apiKey: "%env(FMP_API_KEY)%"

@@ -1,0 +1,11 @@
+# config/packages/framework.yaml
+framework:
+    http_client:
+        scoped_clients:
+            # using base_uri, relative URLs (e.g. request("GET", "/repos/symfony/symfony-docs"))
+            # will default to these options
+            fmp.client:
+                base_uri: '%env(FMP_API_URL)%'
+                query:
+                    apikey: '%env(FMP_API_KEY)%'
+                # ...

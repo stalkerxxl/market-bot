@@ -2,7 +2,7 @@
 
 namespace App\MessageHandler;
 
-use App\ApiClient\FmpClient;
+use App\Service\FmpApiService;
 use App\Entity\Company;
 use App\Message\DownloadCompanyLogo;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,7 +17,7 @@ final class DownloadCompanyLogoHandler extends AbstractRequestHandler
     public string $companyLogoDir;
 
     public function __construct(
-        FmpClient                $client,
+        FmpApiService            $client,
         LoggerInterface          $logger,
         EntityManagerInterface   $entityManager,
         ValidatorInterface       $validator,

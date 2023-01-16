@@ -18,10 +18,14 @@ framework:
             App\Message\RoasterRequest: async
             # 'App\Message\YourMessage': async
 
-# when@test:
-#    framework:
-#        messenger:
-#            transports:
-#                # replace with your transport name here (e.g., my_transport: 'in-memory://')
-#                # For more Messenger testing tools, see https://github.com/zenstruck/messenger-test
-#                async: 'in-memory://'
+when@test:
+    framework:
+        messenger:
+            transports:
+                # replace with your transport name here (e.g., my_transport: 'in-memory://')
+                # For more Messenger testing tools, see https://github.com/zenstruck/messenger-test
+                #async: '%env(MESSENGER_TRANSPORT_DSN)%'
+                async: 'in-memory://'
+                sync: 'sync://'
+            routing:
+                App\Message\CompanyRequest: sync            # Route your messages to the transports
