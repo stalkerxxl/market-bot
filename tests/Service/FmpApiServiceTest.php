@@ -29,7 +29,6 @@ class FmpApiServiceTest extends KernelTestCase
     {
         /*$this->container = static::getContainer();
         $this->fmpClient = $this->container->get('fmp.client');*/
-
     }
 
     private function refreshFmpService()
