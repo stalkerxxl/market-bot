@@ -3,4 +3,4 @@ services:
         #alias: FmpApiServiceTest
         public: true
         arguments:
-          [ '@fmp.client' ]
+            $fmpClient: '@fmp.client'
