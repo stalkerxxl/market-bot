@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Enum\IndexList;
 use App\Exception\FmpClientException;
+use Symfony\Component\DependencyInjection\Attribute\When;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 

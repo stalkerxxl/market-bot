@@ -1,0 +1,6 @@
+services:
+    App\Service\FmpApiService:
+        #alias: FmpApiServiceTest
+        public: true
+        arguments:
+          [ '@fmp.client' ]
