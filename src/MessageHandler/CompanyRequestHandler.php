@@ -23,6 +23,7 @@ final class CompanyRequestHandler extends AbstractRequestHandler
     {
         try {
             $response = $this->client->getProfile($message->getSymbol());
+            //FIXME делать фабрику ResponseDTO
             $dto = CompanyResponse::create($response[0]);
 
             //FIXME валидировать Entity, а не DTO
