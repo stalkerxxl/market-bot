@@ -7,7 +7,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 abstract class AbstractResponseDTO implements ResponseDTOInterface
 {
-    abstract public function create(array $apiData);
+    abstract public function create(array $apiData): self;
 
     private function getPropertyAccessor(): PropertyAccessorInterface
     {
@@ -17,7 +17,7 @@ abstract class AbstractResponseDTO implements ResponseDTOInterface
             ->getPropertyAccessor();
     }
 
-    protected function hydrateDTO(ResponseDTOInterface $dto, array $apiData): static
+    protected function hydrateDTO(self $dto, array $apiData): static
     {
         $propertyAccessor = $this->getPropertyAccessor();
         foreach ($apiData as $property => $value) {

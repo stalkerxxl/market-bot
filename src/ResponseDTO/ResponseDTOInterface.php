@@ -4,5 +4,5 @@ namespace App\ResponseDTO;
 
 interface ResponseDTOInterface
 {
-    public function create(array $apiData);
+    public function create(array $apiData): AbstractResponseDTO;
 }
