@@ -1,10 +1,10 @@
 <?php
 
-namespace App\DTO;
+namespace App\ResponseDTO;
 
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
-class TransactionResponse extends AbstractResponse
+class TransactionResponse
 {
     public \DateTimeImmutable $filingDate;
     public \DateTimeImmutable $date;
@@ -24,7 +24,7 @@ class TransactionResponse extends AbstractResponse
      * @throws ExceptionInterface
      */
     public static function create(array $response): TransactionResponse
-    {// FIXME херня какая-то.. переделать всю логику DTO
+    {// FIXME херня какая-то.. переделать всю логику Response
         $response['filingDate'] = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $response['filingDate']);
         $response['date'] = \DateTimeImmutable::createFromFormat('Y-m-d', $response['transactionDate']);
         $response['cik'] = $response['reportingCik'];
@@ -46,6 +46,6 @@ class TransactionResponse extends AbstractResponse
             $response['typeOfOwner']
         );
 
-        return parent::denormalize($response);
+        //return parent::denormalize($response);
     }
 }

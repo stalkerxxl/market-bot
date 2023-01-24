@@ -1,10 +1,10 @@
 <?php
 
-namespace App\DTO;
+namespace App\ResponseDTO;
 
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
-class RoasterResponse extends AbstractResponse
+class RoasterResponse
 {
     public int $year;
     public int $quarter;
@@ -23,6 +23,6 @@ class RoasterResponse extends AbstractResponse
      */
     public static function create(array $response): RoasterResponse
     {
-        return parent::denormalize($response);
+        //return parent::denormalize($response);
     }
 }

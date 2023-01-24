@@ -2,7 +2,7 @@
 
 namespace App\MessageHandler;
 
-use App\DTO\IndexListResponse;
+use App\ResponseDTO\IndexListResponse;
 use App\Enum\IndexList;
 use App\Event\IndexListUpdatedEvent;
 use App\Exception\FmpClientException;

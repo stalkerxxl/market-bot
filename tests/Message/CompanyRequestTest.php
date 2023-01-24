@@ -5,14 +5,10 @@ namespace App\Tests\Message;
 use App\Message\CompanyRequest;
 use App\Repository\CompanyRepository;
 use App\Service\FmpApiService;
-use Generator;
-use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\MockObject\MockObject;
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Debug\TraceableEventDispatcher;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\TraceableMessageBus;
@@ -155,5 +151,9 @@ class CompanyRequestTest extends KernelTestCase
         $this->expectException(HandlerFailedException::class);
         $this->expectExceptionMessage('Undefined array key 0');
         $this->messageBus->dispatch(new CompanyRequest('AAPL'));
+    }
+
+    public function testIfApiResponseIsInvalid(){
+        self::markTestIncomplete(__METHOD__. ' не готов');
     }
 }

@@ -1,11 +1,10 @@
 <?php
 
-namespace App\DTO;
+namespace App\ResponseDTO;
 
 use Exception;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
-final class CompanyResponse extends AbstractResponse
+final class CompanyResponseDTO extends AbstractResponseDTO
 {
     public string $symbol;
     //$response['companyName']
@@ -30,22 +29,18 @@ final class CompanyResponse extends AbstractResponse
     public string $sector; //Sector->name
     public string $industry; //Industry->name
 
-    /**
-     * @throws ExceptionInterface
-     */
-    public static function create(array $response): self
+    public function create(array $apiData): self
     {
-        $response['name'] = $response['companyName'];
-        $response['imageUrl'] = $response['image'];
-        unset($response['companyName'], $response['image']);
+        $this->name = $apiData['companyName'];
+        $this->imageUrl = $apiData['image'];
 
-        return parent::denormalize($response);
+        return $this->hydrateDTO($this, $apiData);
     }
 
     /**
      * @throws Exception
      */
-    public function setIpoDate(string $ipoDate): CompanyResponse
+    public function setIpoDate(string $ipoDate): self
     {
         $this->ipoDate = new \DateTimeImmutable($ipoDate);
         return $this;

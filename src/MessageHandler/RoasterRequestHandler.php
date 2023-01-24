@@ -2,8 +2,8 @@
 
 namespace App\MessageHandler;
 
-use App\DTO\QuoteResponse;
-use App\DTO\RoasterResponse;
+use App\ResponseDTO\QuoteResponse;
+use App\ResponseDTO\RoasterResponse;
 use App\Entity\Company;
 use App\Entity\Roaster;
 use App\Message\RoasterRequest;

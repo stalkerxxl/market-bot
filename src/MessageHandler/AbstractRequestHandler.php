@@ -2,8 +2,9 @@
 
 namespace App\MessageHandler;
 
+use App\Factory\ResponseDTOFactory;
 use App\Service\FmpApiService;
-use App\DTO\AbstractResponse;
+use App\ResponseDTO\AbstractResponseDTO;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
@@ -19,19 +20,22 @@ abstract class AbstractRequestHandler
     protected EntityManagerInterface $entityManager;
     protected ValidatorInterface $validator;
     protected EventDispatcherInterface $eventDispatcher;
+    protected ResponseDTOFactory $responseDTOFactory;
 
     public function __construct(
         FmpApiService            $client,
         LoggerInterface          $logger,
         EntityManagerInterface   $entityManager,
         ValidatorInterface       $validator,
-        EventDispatcherInterface $eventDispatcher)
+        EventDispatcherInterface $eventDispatcher,
+        ResponseDTOFactory       $responseFactory)
     {
         $this->client = $client;
         $this->logger = $logger;
         $this->entityManager = $entityManager;
         $this->validator = $validator;
         $this->eventDispatcher = $eventDispatcher;
+        $this->responseDTOFactory = $responseFactory;
     }
 
     protected function validateEntity(object $entity): void
@@ -49,7 +53,7 @@ abstract class AbstractRequestHandler
             ->getPropertyAccessor();
     }
 
-    protected function hydrateEntityFromDTO(object $entity, AbstractResponse $dto): void
+    protected function hydrateEntityFromDTO(object $entity, AbstractResponseDTO $dto): void
     {
         $propertyAccessor = $this->getPropertyAccessor();
         foreach ($dto as $property => $value) {

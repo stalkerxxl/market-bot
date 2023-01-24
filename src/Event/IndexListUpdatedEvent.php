@@ -2,7 +2,7 @@
 
 namespace App\Event;
 
-use App\DTO\IndexListResponse;
+use App\ResponseDTO\IndexListResponse;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class IndexListUpdatedEvent extends Event

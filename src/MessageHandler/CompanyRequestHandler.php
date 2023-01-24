@@ -2,7 +2,7 @@
 
 namespace App\MessageHandler;
 
-use App\DTO\CompanyResponse;
+use App\ResponseDTO\CompanyResponseDTO;
 use App\Entity\Company;
 use App\Entity\Industry;
 use App\Entity\Sector;
@@ -24,9 +24,9 @@ final class CompanyRequestHandler extends AbstractRequestHandler
         try {
             $response = $this->client->getProfile($message->getSymbol());
             //FIXME делать фабрику ResponseDTO
-            $dto = CompanyResponse::create($response[0]);
+            $dto = $this->responseDTOFactory->fromArray(new CompanyResponseDTO(), $response[0]);
 
-            //FIXME валидировать Entity, а не DTO
+            //FIXME валидировать Entity, а не Response
             $this->validateEntity($dto);
 
             $sector = $this->makeSector($dto);
@@ -42,7 +42,7 @@ final class CompanyRequestHandler extends AbstractRequestHandler
         }
     }
 
-    private function makeSector(CompanyResponse $dto): Sector
+    private function makeSector(CompanyResponseDTO $dto): Sector
     {
         $sectorRepository = $this->entityManager->getRepository(Sector::class);
         $sector = $sectorRepository->findOneBy(['name' => $dto->sector]);
@@ -54,7 +54,7 @@ final class CompanyRequestHandler extends AbstractRequestHandler
         return $sector;
     }
 
-    private function makeIndustry(CompanyResponse $dto, Sector $sector): Industry
+    private function makeIndustry(CompanyResponseDTO $dto, Sector $sector): Industry
     {
         $industryRepository = $this->entityManager->getRepository(Industry::class);
         $industry = $industryRepository->findOneBy(['name' => $dto->industry]);
@@ -68,7 +68,7 @@ final class CompanyRequestHandler extends AbstractRequestHandler
         return $industry;
     }
 
-    private function makeCompany(CompanyResponse $dto, Sector $sector, Industry $industry): Company
+    private function makeCompany(CompanyResponseDTO $dto, Sector $sector, Industry $industry): Company
     {
         $companyRepository = $this->entityManager->getRepository(Company::class);
         $company = $companyRepository->findOneBy(['symbol' => $dto->symbol]);

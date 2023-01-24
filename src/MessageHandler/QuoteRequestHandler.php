@@ -2,7 +2,7 @@
 
 namespace App\MessageHandler;
 
-use App\DTO\QuoteResponse;
+use App\ResponseDTO\QuoteResponse;
 use App\Entity\Company;
 use App\Entity\Quote;
 use App\Event\QuoteUpdatedEvent;
@@ -27,7 +27,7 @@ final class QuoteRequestHandler extends AbstractRequestHandler
             $response = $this->client->getQuote($company->getSymbol());
             $dto = QuoteResponse::create($response[0]);
 
-            // FIXME проверять Entity, а не DTO
+            // FIXME проверять Entity, а не Response
             $this->validateEntity($dto);
 
             $quote = $company->getQuote();

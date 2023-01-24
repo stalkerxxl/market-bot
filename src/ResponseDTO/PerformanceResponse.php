@@ -1,8 +1,8 @@
 <?php
 
-namespace App\DTO;
+namespace App\ResponseDTO;
 
-class PerformanceResponse extends AbstractResponse
+class PerformanceResponse
 {
     public float $day1;
     public float $day5;
@@ -16,7 +16,7 @@ class PerformanceResponse extends AbstractResponse
     public float $year10;
     public float $max;
 
-    public static function create(array $response): PerformanceResponse
+ /*   public static function create(array $response): PerformanceResponse
     {
         $dto = new self();
         $dto->day1 = $response['1D'];
@@ -32,5 +32,5 @@ class PerformanceResponse extends AbstractResponse
         $dto->max = $response['max'];
 
         return $dto;
-    }
+    }*/
 }

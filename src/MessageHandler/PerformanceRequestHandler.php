@@ -2,7 +2,7 @@
 
 namespace App\MessageHandler;
 
-use App\DTO\PerformanceResponse;
+use App\ResponseDTO\PerformanceResponse;
 use App\Entity\Company;
 use App\Entity\Performance;
 use App\Event\PerformanceUpdatedEvent;
@@ -25,7 +25,7 @@ final class PerformanceRequestHandler extends AbstractRequestHandler
             $response = $this->client->getStockPriceChange($company->getSymbol());
             $dto = PerformanceResponse::create($response[0]);
 
-            //FIXME валидировать Entity, а не DTO
+            //FIXME валидировать Entity, а не Response
             $this->validateEntity($dto);
 
             $performance = $company->getPerformance();

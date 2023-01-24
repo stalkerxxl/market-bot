@@ -1,13 +1,13 @@
 <?php
 
-namespace App\DTO;
+namespace App\ResponseDTO;
 
 use DateTimeImmutable;
 use Exception;
 use phpDocumentor\Reflection\Types\This;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
-class QuoteResponse extends AbstractResponse
+class QuoteResponse
 {
     public float $price;
     public float $open;
@@ -37,7 +37,7 @@ class QuoteResponse extends AbstractResponse
         $response['apiTimestamp'] = $response['timestamp'];
         unset($response['timestamp']);
 
-        return parent::denormalize($response);
+        //return parent::denormalize($response);
     }
 
     /**
