@@ -23,10 +23,8 @@ final class CompanyRequestHandler extends AbstractRequestHandler
     {
         try {
             $response = $this->client->getProfile($message->getSymbol());
-            //FIXME делать фабрику ResponseDTO
-            $dto = $this->responseDTOFactory->fromArray(new CompanyResponseDTO(), $response[0]);
-
-            //FIXME валидировать Entity, а не Response
+            $dto = $this->responseDTOFactory
+                ->fromArray(new CompanyResponseDTO(), $response[0]);
             $this->validateEntity($dto);
 
             $sector = $this->makeSector($dto);
